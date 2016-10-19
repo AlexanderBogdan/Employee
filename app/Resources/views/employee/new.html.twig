@@ -1,0 +1,104 @@
+{% extends 'base.html.twig' %}
+{% form_theme form 'bootstrap_3_layout.html.twig' %}
+
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-offset-3 col-sm-6">
+                <h1 class="text-center">Employee creation</h1>
+
+                {{ form_start(form) }}
+                {{ form_row(form.firstName) }}
+                {{ form_row(form.lastName) }}
+                {{ form_row(form.gender) }}
+                {{ form_row(form.birthdate) }}
+                {{ form_row(form.salary) }}
+                {{ form_row(form.comment) }}
+
+                <h3>Phones</h3>
+                <ul class="list-unstyled phones" data-prototype="{{ form_widget(form.phones.vars.prototype)|e('html_attr') }}">
+                    {% for phone in form.phones %}
+                        <li>{{ form_widget(phone) }}</li>
+                    {% endfor %}
+                </ul>
+
+                <h3>Addresses</h3>
+                <ul class="list-unstyled addresses" data-prototype="{{ form_widget(form.addresses.vars.prototype)|e('html_attr') }}">
+                    {% for address in form.addresses %}
+                        <li>{{ form_widget(address) }}</li>
+                    {% endfor %}
+                </ul>
+
+                <input type="submit" value="Create" class="btn btn-success"/>
+                {{ form_end(form) }}
+
+                <ul>
+                    <li>
+                        <a href="{{ path('employee_index') }}">Back to the list</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        jQuery(document).ready(function() {
+            // Get the ul that holds the collection
+            $('ul.phones, ul.addresses').each(function() {
+
+                function addForm($collectionHolder, $newLinkLi) {
+                    // Get the data-prototype explained earlier
+                    var prototype = $collectionHolder.data('prototype');
+
+                    // get the new index
+                    var index = $collectionHolder.data('index');
+
+                    // Replace '__name__' in the prototype's HTML to
+                    // instead be a number based on how many items we have
+                    var newForm = prototype.replace(/__name__/g, index);
+
+                    // increase the index with one for the next item
+                    $collectionHolder.data('index', index + 1);
+
+                    // Display the form in the page in an li, before the "Add a tag" link li
+                    var $newFormLi = $('<li></li>').append(newForm);
+                    $newLinkLi.before($newFormLi);
+                    addFormDeleteLink($newFormLi);
+                    $newFormLi.find(':input').focus();
+                }
+
+                function addFormDeleteLink($li) {
+
+                    var $removeLink = $('<a href="#"> (remove item)</a>');
+                    $li.find('label').append($removeLink);
+
+                    $removeLink.on('click', function(e) {
+                        e.preventDefault();
+
+                        $li.remove();
+                    });
+
+                }
+
+                var $collectionHolder = $(this);
+
+                $collectionHolder.find('li').each(function() {
+                    addFormDeleteLink($(this));
+                });
+
+                var $newItemLink = $('<a href="#" class="btn btn-link">Add new item</a>');
+                var $newItemLinkLi = $('<li></li>').append($newItemLink);
+                $collectionHolder.append($newItemLinkLi);
+                $collectionHolder.data('index', $collectionHolder.find(':input').length);
+
+                $newItemLink.on('click', function(e) {
+                    e.preventDefault();
+                    addForm($collectionHolder, $newItemLinkLi);
+                })
+            });
+        });
+    </script>
+{% endblock %}

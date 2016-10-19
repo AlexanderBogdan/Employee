@@ -1,0 +1,28 @@
+{% extends 'HWIOAuthBundle::layout.html.twig' %}
+
+{% block hwi_oauth_content %}
+    {% if error is defined and error %}
+        <span>{{ error }}</span>
+    {% endif %}
+    {% for owner in hwi_oauth_resource_owners() %}
+        {% if owner =='auth0' %}
+            <div id="root" style="width: 320px; margin: 40px auto; padding: 10px;"></div>
+            <script src="https://cdn.auth0.com/js/lock/10.4/lock.min.js"></script>
+            <script>
+                var lock = new Auth0Lock('{{ auth0_client_id }}', '{{ auth0_domain }}', {
+                    container: 'root',
+                    auth: {
+                        redirectUrl: '{{ app.request.getSchemeAndHttpHost() }}/auth0/callback',
+                        responseType: 'code',
+                        params: {
+                            scope: 'openid email'
+                        }
+                    }
+                });
+                lock.show();
+            </script>
+        {% else %}
+            <a href="{{ hwi_oauth_login_url(owner) }}">{{ owner | trans({}, 'HWIOAuthBundle') }}</a> <br />
+        {% endif %}
+    {% endfor %}
+{% endblock hwi_oauth_content %}

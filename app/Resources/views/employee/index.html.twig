@@ -1,0 +1,76 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+
+    <h1>Employee list</h1>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Firstname</th>
+                <th>Lastname</th>
+                <th>Gender</th>
+                <th>Birthdate</th>
+                <th>Comment</th>
+                <th>Addresses</th>
+                <th>Phones</th>
+                <th>Salary</th>
+                <th>Is Active?</th>
+                <th>Is Removed?</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for employee in employees %}
+            <tr>
+                <td><a href="{{ path('employee_show', { 'id': employee.id }) }}">{{ employee.id }}</a></td>
+                <td>{{ employee.firstName }}</td>
+                <td>{{ employee.lastName }}</td>
+                <td>{{ employee.gender }}</td>
+                <td>{% if employee.birthdate %}{{ employee.birthdate|date('F, jS Y') }}{% endif %}</td>
+                <td>{{ employee.comment }}</td>
+                <td>
+                    <ul>
+                        {% for address in employee.addresses %}
+                            <li>{{ address.address }}</li>
+                        {% endfor %}
+                    </ul>
+                </td>
+                <td>
+                    <ul>
+                        {% for phone in employee.phones %}
+                            <li>{{ phone.phone }}</li>
+                        {% endfor %}
+                    </ul>
+                </td>
+                <td>{{ employee.salary }}</td>
+                <td>{% if employee.isActive %}Yes{% else %}No{% endif %}</td>
+                <td>{% if employee.isRemoved %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('employee_show', { 'id': employee.id }) }}">show</a>
+                        </li>
+                        {% if is_granted('ROLE_ADMIN') %}
+                        <li>
+                            <a href="{{ path('employee_edit', { 'id': employee.id }) }}">edit</a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    {% if is_granted('ROLE_MANAGER') %}
+    <ul>
+        <li>
+            <a href="{{ path('employee_new') }}">Create a new entry</a>
+        </li>
+    </ul>
+    {% endif %}
+    </div>
+{% endblock %}

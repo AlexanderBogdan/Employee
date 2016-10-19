@@ -1,0 +1,84 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+    <h1>Employee</h1>
+
+    <table class="table table-striped">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ employee.id }}</td>
+            </tr>
+            <tr>
+                <th>Firstname</th>
+                <td>{{ employee.firstName }}</td>
+            </tr>
+            <tr>
+                <th>Lastname</th>
+                <td>{{ employee.lastName }}</td>
+            </tr>
+            <tr>
+                <th>Gender</th>
+                <td>{{ employee.gender }}</td>
+            </tr>
+            <tr>
+                <th>Birthdate</th>
+                <td>{% if employee.birthdate %}{{ employee.birthdate|date('F, jS Y') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Comment</th>
+                <td>{{ employee.comment }}</td>
+            </tr>
+            <tr>
+                <th>Salary</th>
+                <td>{{ employee.salary }}</td>
+            </tr>
+            <tr>
+                <th>Addresses</th>
+                <td>
+                    <ul>
+                        {% for address in employee.addresses %}
+                            <li>{{ address.address }}</li>
+                        {% endfor %}
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <th>Phones</th>
+                <td>
+                    <ul>
+                        {% for phone in employee.phones %}
+                            <li>{{ phone.phone }}</li>
+                        {% endfor %}
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <th>Is Active?</th>
+                <td>{% if employee.isActive %}Yes{% else %}No{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Is Removed?</th>
+                <td>{% if employee.isRemoved %}Yes{% else %}No{% endif %}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('employee_index') }}">Back to the list</a>
+        </li>
+        {% if is_granted('ROLE_ADMIN') %}
+        <li>
+            <a href="{{ path('employee_edit', { 'id': employee.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Remove (mark as removed)">
+            {{ form_end(delete_form) }}
+        </li>
+        {% endif %}
+    </ul>
+    </div>
+{% endblock %}
