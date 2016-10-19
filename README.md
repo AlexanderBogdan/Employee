@@ -60,3 +60,10 @@ Description:
 - Unit test is located at tests/AppBundle/Entity/EmployeeEntityTest.php,
 test ensures that Employee's entity gender can be either "m" or "f" or NULL.
  In other cases InvalidArgumentException is thrown.
+
+Users:
+------
+3 available users with different roles are enabled in Auth0 service, you can login with these credentials:
+- login: worker@test.com, pass: worker, role - "worker"
+- login: manager@test.com, pass: manager, role - "manager"
+- login: admin@test.com, pass: admin, role - "admin"
