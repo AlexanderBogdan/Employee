@@ -5,15 +5,15 @@ Made by Oleksandr Bogdan
 Installation:
 -------------
 
-1. Clone the project
+1) Clone the project
 ```
 git clone git@github.com:AlexanderBogdan/employee.git
 ```
-2. Run installation
+2) Run installation
 ```
 composer install
 ```
-3. Auth0 parameters
+3) Auth0 parameters
 ```
 auth0_base_url
 auth0_domain
@@ -22,19 +22,19 @@ auth0_client_secret
 ```
 Leave the default values when prompted during composer install
 
-4. Generate database schema
+4) Generate database schema
 ```
 php bin/console doctrine:schema:update --force
 ```
-5. Load fixtures
+5) Load fixtures
 ```
 php bin/console doctrine:fixtures:load
 ```
-6. Run built-in Symfony server
+6) Run built-in Symfony server
 ```
 php bin/console server:run
 ```
-7. Open http://localhost:8000 
+7) Open http://localhost:8000 
 > IMPORTANT! 
 > http://localhost:8000 is required for Auth0 service to work correctly.
 > DO NOT USE http://127.0.0.1:8000 - Auth0 would not work
